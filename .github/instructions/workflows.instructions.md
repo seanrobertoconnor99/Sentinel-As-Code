@@ -11,7 +11,7 @@ pipelines live under `Pipelines/`. The ADO version is the default
 source of truth — GitHub workflows mirror ADO behaviour except in
 the narrow documented cases covered under Hard rule 1 below.
 Reference doc:
-[`Docs/Deployment/Pipelines.md`](../../Docs/Deployment/Pipelines.md).
+[`Docs/Pipelines/README.md`](../../Docs/Pipelines/README.md).
 
 ## File inventory
 
@@ -22,6 +22,7 @@ Reference doc:
 | `.github/workflows/sentinel-dcr-inventory.yml` | `Pipelines/Sentinel-DCR-Inventory.yml` | On change: deploy DCR inventory runbook |
 | `.github/workflows/sentinel-dependency-update.yml` | `Pipelines/Sentinel-Dependency-Update.yml` | Daily 02:00 UTC: refresh `dependencies.json` + auto-PR |
 | `.github/workflows/pr-validation.yml` | `Pipelines/Sentinel-PR-Validation.yml` | On every PR: 5-job merge gate |
+| `.github/workflows/pr-template-validation.yml` | *(GitHub-only)* | On every PR: fail if the PR description does not fill in `.github/PULL_REQUEST_TEMPLATE.md` |
 | `.github/workflows/sentinel-deploy-nightly.yml` | *(GitHub-only)* | Daily 03:00 UTC: E2E smoke test against test workspace |
 
 ## Composite actions
@@ -77,7 +78,7 @@ instead of inlining `Azure/login@v2` or `Install-Module` patterns:
    pin to `@main` or `@master`.
 4. **Auth via OIDC, not service principal secrets.** All federated
    creds use the SP set up by
-   `Scripts/Setup-ServicePrincipal.ps1`; the workflow needs
+   `Deploy/setup/Setup-ServicePrincipal.ps1`; the workflow needs
    `permissions: id-token: write`.
 5. **Schedule alignment** — daily / weekly schedules must avoid
    stepping on each other. Current alignment:
@@ -103,7 +104,7 @@ instead of inlining `Azure/login@v2` or `Install-Module` patterns:
 The ADO PR-validation policy currently filters on these paths:
 
 ```
-AnalyticalRules/*;HuntingQueries/*;Modules/*;Scripts/*;Tests/*;dependencies.json
+Content/AnalyticalRules/*;Content/HuntingQueries/*;Modules/*;Deploy/*;Tools/*;Tests/*;dependencies.json
 ```
 
 If you add a new top-level folder that should trigger PR validation
@@ -120,6 +121,6 @@ places:
 
 ## Cross-references
 
-- Pipeline reference: [`Docs/Deployment/Pipelines.md`](../../Docs/Deployment/Pipelines.md)
-- Composite actions: [`Docs/Deployment/PR-Validation-Setup.md`](../../Docs/Deployment/PR-Validation-Setup.md)
-- PR-validation gate reference: [`Docs/Development/Pester-Tests.md`](../../Docs/Development/Pester-Tests.md)
+- Pipeline reference: [`Docs/Pipelines/README.md`](../../Docs/Pipelines/README.md)
+- Composite actions: [`Docs/Deploy/PR-Validation-Setup.md`](../../Docs/Deploy/PR-Validation-Setup.md)
+- PR-validation gate reference: [`Docs/Tests/Pester-Tests.md`](../../Docs/Tests/Pester-Tests.md)

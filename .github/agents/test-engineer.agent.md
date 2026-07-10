@@ -31,7 +31,7 @@ the prompt bootstraps one file; you reason about the suite.
 
 - `Tests/*.Tests.ps1` — every Pester file
 - `Tests/_helpers/Import-ScriptFunctions.psm1` — the AST helper
-- `Scripts/Invoke-PRValidation.ps1` — the cross-platform PR gate
+- `Tools/Invoke-PRValidation.ps1` — the cross-platform PR gate
   entry point
 
 ## Read this before editing
@@ -39,7 +39,7 @@ the prompt bootstraps one file; you reason about the suite.
 - [`.github/instructions/pester-tests.instructions.md`](../instructions/pester-tests.instructions.md)
   — path-scoped instructions (loads automatically when you edit
   any `Tests/**.ps1`).
-- [`Docs/Development/Pester-Tests.md`](../../Docs/Development/Pester-Tests.md)
+- [`Docs/Tests/Pester-Tests.md`](../../Docs/Tests/Pester-Tests.md)
   — full conventions, AST extraction explanation, test inventory.
 
 ## The two test patterns
@@ -58,8 +58,8 @@ For a `.psm1` module (like `Sentinel.Common`), use direct
 ### Adding coverage for an untested script
 
 1. **Identify what's missing.** Look at
-   [`Docs/Development/Pester-Tests.md`](../../Docs/Development/Pester-Tests.md)'s
-   test inventory. If a script under `Scripts/` has no
+   [`Docs/Tests/Pester-Tests.md`](../../Docs/Tests/Pester-Tests.md)'s
+   test inventory. If a script under `Deploy/` or `Tools/` has no
    corresponding `Tests/Test-<ScriptName>.Tests.ps1`, that's the
    gap.
 2. **Pick the functions to cover.** Read the script. Functions
@@ -72,7 +72,7 @@ For a `.psm1` module (like `Sentinel.Common`), use direct
        Import-Module "$repoRoot/Tests/_helpers/Import-ScriptFunctions.psm1" -Force
 
        $functions = Import-ScriptFunctions `
-           -ScriptPath "$repoRoot/Scripts/<Name>.ps1"
+           -ScriptPath "$repoRoot/Deploy/<Name>.ps1"
        . ([scriptblock]::Create($functions))
 
        Import-Module "$repoRoot/Modules/Sentinel.Common/Sentinel.Common.psd1" -Force
@@ -88,7 +88,7 @@ For a `.psm1` module (like `Sentinel.Common`), use direct
    Invoke-Pester -Path Tests/Test-<ScriptName>.Tests.ps1
    ```
 7. **Add the file to the test inventory** in
-   [`Docs/Development/Pester-Tests.md`](../../Docs/Development/Pester-Tests.md).
+   [`Docs/Tests/Pester-Tests.md`](../../Docs/Tests/Pester-Tests.md).
 
 ### Refactoring a slow / fragile suite
 
@@ -97,7 +97,7 @@ For a `.psm1` module (like `Sentinel.Common`), use direct
    Invoke-Pester -Path Tests/Test-X.Tests.ps1 -Output Detailed
    ```
 2. **Look for repeated work.** A `BeforeAll` that walks the entire
-   `AnalyticalRules/` tree once per test should walk it once per
+   `Content/AnalyticalRules/` tree once per test should walk it once per
    `Describe`.
 3. **Lift `Get-ChildItem` into `BeforeDiscovery`.** That runs once
    per file at discovery time, before any test runs. Per-file `It`
@@ -146,7 +146,7 @@ The repo's tricky cases:
 | `Sentinel.Common` exports | Every public function has unit tests |
 | Critical scripts (deploy, drift, dep-manifest) | Higher bar — every branch in core orchestration |
 
-Existing total: ~6,000 assertions across 17 files. Run-time
+Existing total: ~6,000 assertions across 18 files. Run-time
 under 30s on a clean clone.
 
 ## Hand-offs

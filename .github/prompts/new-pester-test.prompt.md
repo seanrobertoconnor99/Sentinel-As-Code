@@ -23,7 +23,7 @@ the repo uses for script-level testing.
 
 1. **Identify the target.** Ask the user for:
    - The target script or module path (e.g.
-     `Scripts/Deploy-CustomContent.ps1`)
+     `Deploy/content/Deploy-CustomContent.ps1`)
    - Which functions to cover (or "all of them")
    - What level of mocking is needed (Az cmdlets,
      `Sentinel.Common` REST wrappers, file system, etc.)
@@ -54,7 +54,7 @@ the repo uses for script-level testing.
    ```
 
 7. **Add the file to the test inventory** in
-   [`Docs/Development/Pester-Tests.md`](../../Docs/Development/Pester-Tests.md).
+   [`Docs/Tests/Pester-Tests.md`](../../Docs/Tests/Pester-Tests.md).
 
 ## Reference: AST-extraction pattern (script under test)
 
@@ -63,12 +63,12 @@ the repo uses for script-level testing.
 
 <#
 .SYNOPSIS
-    Pester 5 unit tests for functions in Scripts/<TargetName>.ps1.
+    Pester 5 unit tests for functions in Deploy/<TargetName>.ps1.
 #>
 
 BeforeAll {
     $repoRoot   = Split-Path -Parent $PSScriptRoot
-    $scriptPath = Join-Path $repoRoot 'Scripts/<TargetName>.ps1'
+    $scriptPath = Join-Path $repoRoot 'Deploy/<TargetName>.ps1'
 
     Import-Module (Join-Path $PSScriptRoot '_helpers/Import-ScriptFunctions.psm1') -Force -ErrorAction Stop
     Import-ScriptFunctions -Path $scriptPath
@@ -130,4 +130,4 @@ Describe '<ContentType> schema' -ForEach $files {
   reference example.
 
 See the full conventions in
-[`Docs/Development/Pester-Tests.md`](../../Docs/Development/Pester-Tests.md).
+[`Docs/Tests/Pester-Tests.md`](../../Docs/Tests/Pester-Tests.md).

@@ -1,7 +1,7 @@
 ---
 name: Watchlists
-description: Schema for Watchlists/<alias>/watchlist.json + data.csv pairs.
-applyTo: "Watchlists/**"
+description: Schema for Content/Watchlists/<alias>/watchlist.json + data.csv pairs.
+applyTo: "Content/Watchlists/**"
 ---
 
 # Watchlist authoring
@@ -15,15 +15,19 @@ with two files. Full schema in
 ## Folder layout
 
 ```
-Watchlists/
+Content/Watchlists/
 └── <alias>/
     ├── watchlist.json   # metadata
     └── data.csv         # the actual data
 ```
 
-The folder name `<alias>` must match `watchlistAlias` inside
-`watchlist.json` exactly. The Pester test enforces this and aborts
-the deploy on mismatch.
+By convention the folder name matches the `watchlistAlias` inside
+`watchlist.json`. Deployment and `_GetWatchlist()` resolution both key off
+the `watchlistAlias` value in the JSON (not the folder name), so keep the
+two identical to avoid confusion. Note: no test compares the folder name to
+the alias. What IS enforced is that a `_GetWatchlist('alias')` reference
+resolves to a `watchlist.json` whose `watchlistAlias` matches (see
+Cross-validation below).
 
 ## watchlist.json
 
@@ -39,11 +43,12 @@ the deploy on mismatch.
 
 ### Hard rules
 
-1. **`watchlistAlias` must equal the folder name.** Cross-validation
-   test enforces this.
+1. **Keep `watchlistAlias` equal to the folder name (convention).** Not
+   enforced by a test, but every `_GetWatchlist()` call and the dependency
+   manifest key off the `watchlistAlias` value, so a divergent folder name
+   is confusing. See Cross-validation below for what IS enforced.
 2. **`watchlistAlias` is also the value used in
-   `_GetWatchlist('alias')` calls.** Renaming the folder breaks every
-   rule that references it.
+   `_GetWatchlist('alias')` calls.** Renaming the alias breaks every rule that references it; renaming the folder alone does not, because resolution keys off the `watchlistAlias` value in `watchlist.json`, not the folder name (though divergent names are confusing).
 3. **`itemsSearchKey` must be a column in `data.csv`.** Otherwise
    the watchlist deploys but `_GetWatchlist()` lookups don't resolve.
 4. **`provider`** is almost always `"Custom"`. Use `"Microsoft"` only
@@ -62,17 +67,17 @@ the deploy on mismatch.
 
 When a rule's KQL contains `_GetWatchlist('Foo')`,
 `Build-DependencyManifest.ps1` checks that
-`Watchlists/Foo/watchlist.json` exists with `watchlistAlias: Foo`.
+`Content/Watchlists/Foo/watchlist.json` exists with `watchlistAlias: Foo`.
 If not, the build script logs a warning. The Pester test
 ([`Tests/Test-DependencyManifest.Tests.ps1`](../../Tests/Test-DependencyManifest.Tests.ps1))
 turns that warning into a hard fail.
 
 To add a new watchlist that's referenced by a rule:
 
-1. Create the `Watchlists/<alias>/` folder with both files.
+1. Create the `Content/Watchlists/<alias>/` folder with both files.
 2. Re-run the dep manifest:
    ```powershell
-   ./Scripts/Build-DependencyManifest.ps1 -Mode Generate
+   ./Tools/Build-DependencyManifest.ps1 -Mode Generate
    ```
 3. Run schema tests:
    ```powershell
@@ -84,4 +89,4 @@ To add a new watchlist that's referenced by a rule:
 
 - Schema: [`Docs/Content/Watchlists.md`](../../Docs/Content/Watchlists.md)
 - Tests: [`Tests/Test-WatchlistJson.Tests.ps1`](../../Tests/Test-WatchlistJson.Tests.ps1)
-- Discovery / cross-validation: [`Docs/Operations/Dependency-Manifest.md`](../../Docs/Operations/Dependency-Manifest.md)
+- Discovery / cross-validation: [`Docs/Tools/Dependency-Manifest.md`](../../Docs/Tools/Dependency-Manifest.md)
