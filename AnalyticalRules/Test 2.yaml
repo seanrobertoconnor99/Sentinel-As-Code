@@ -1,0 +1,30 @@
+id: 5a95d342-a174-488a-9fa2-5783abe1cdca
+name: Test_2
+description: |
+  Test
+severity: Medium
+queryFrequency: PT5H
+queryPeriod: PT5H
+triggerOperator: gt
+triggerThreshold: 0
+enabled: true
+query: |
+  Usage
+  | where false
+eventGroupingSettings:
+  aggregationKind: SingleAlert
+incidentConfiguration:
+  createIncident: true
+  groupingConfiguration:
+    enabled: false
+    reopenClosedIncident: false
+    lookbackDuration: PT5H
+    matchingMethod: AllEntities
+    groupByEntities: []
+    groupByAlertDetails: []
+    groupByCustomDetails: []
+version: 1.0.0
+kind: Scheduled
+tags:
+- Sentinel-As-Code
+- Custom
