@@ -169,7 +169,7 @@ parameters:
   - name: whatIf
     displayName: "🔍 Dry Run — preview changes without applying"
     type: boolean
-    default: false
+    default: true
 
 variables:
   - group: sentinel-deployment      # Variable group containing:
