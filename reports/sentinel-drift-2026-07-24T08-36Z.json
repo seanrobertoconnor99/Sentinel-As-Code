@@ -1,0 +1,28 @@
+{
+  "resourceGroup": "testRG",
+  "generatedAt": "2026-07-24T08:36:32Z",
+  "workspace": "testLA",
+  "drifted": [],
+  "orphans": [
+    {
+      "ruleId": "/subscriptions/4c7d4e4e-eee6-40d3-8d69-edbb861b2345/resourceGroups/testrg/providers/Microsoft.OperationalInsights/workspaces/testla/providers/Microsoft.SecurityInsights/alertRules/7848e98c-ea51-46b3-8f86-00b06c2f148a",
+      "ruleName": "7848e98c-ea51-46b3-8f86-00b06c2f148a",
+      "displayName": "Test",
+      "kind": "Scheduled",
+      "enabled": true,
+      "absorbedPath": "/home/runner/work/Sentinel-As-Code/Sentinel-As-Code/Content/AnalyticalRules/AbsorbedFromPortal/Orphans/Test.yaml",
+      "absorbedAction": "created"
+    }
+  ],
+  "subscriptionId": "4c7d4e4e-eee6-40d3-8d69-edbb861b2345",
+  "summary": {
+    "totalDeployed": 2,
+    "customDrift": 0,
+    "skipped": 0,
+    "managed": 1,
+    "contentHubDrift": 0,
+    "contentHubClean": 0,
+    "orphan": 1,
+    "customClean": 0
+  }
+}
