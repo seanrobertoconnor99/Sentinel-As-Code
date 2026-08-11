@@ -1,0 +1,31 @@
+id: 7848e98c-ea51-46b3-8f86-00b06c2f148a
+name: Test
+description: |
+  Test
+severity: Medium
+queryFrequency: PT5H
+queryPeriod: PT5H
+triggerOperator: gt
+triggerThreshold: 0
+enabled: true
+query: |
+  Usage
+  | where false
+eventGroupingSettings:
+  aggregationKind: SingleAlert
+incidentConfiguration:
+  createIncident: true
+  groupingConfiguration:
+    enabled: false
+    reopenClosedIncident: false
+    lookbackDuration: PT5H
+    matchingMethod: AllEntities
+    groupByEntities: []
+    groupByAlertDetails: []
+    groupByCustomDetails: []
+version: 1.0.0
+kind: Scheduled
+tags:
+- Sentinel-As-Code
+- Custom
+- AbsorbedFromPortal-Orphan
